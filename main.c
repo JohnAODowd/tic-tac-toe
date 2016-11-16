@@ -19,7 +19,7 @@
 #define PIN7 7 
 #define PIN8 8 
 #define PIN9 9
-#define PIN0 10
+#define PIN10 10
 
 
 // Spare PINs
@@ -44,7 +44,7 @@ void setup() {
   
 }
 
-void printBoard() {
+void setupBoard() {
   // Row 1
   int topright = board[1][1];
   int topmid   = board[1][2];
@@ -59,6 +59,56 @@ void printBoard() {
   int botright = board[3][1];
   int botmid   = board[3][2];
   int botleft  = board[3][3];
+}
+
+bool gameOver() {
+  // Game is over when there is a draw or when there is a win.
+  if ( isFull() ) {
+
+    // Check for win:
+
+    //  vertically:
+    if (topright == midright && midright == botright) ||
+       (topmid == midmid && midmid == botmid) ||
+       (topleft == midleft && midleft == botleft) {
+      return true;
+    }
+    //  horizontally:
+    if (topright == topmid && topmid == topleft) || 
+       (midright == midmid && midmid == midleft) ||
+       (botright == botmid && botmid == botleft) {
+      return true;
+    }
+    //  diagonally:
+    if (topright == midmid && midmid == botleft){
+      return true;
+    } else if (topleft == midmid && midmid == botright){
+      return true;
+    }
+
+    // Check for draw:
+    // sanity check?
+    // if board is full and not won, must be a draw?
+
+    // also: separate return for draw?
+
+  } else {
+    // Board is not full, so game is not over.
+    return false;
+  }
+
+}
+
+bool isFull(){
+  // Return true if board is filled, false otherwise.
+  for (int i = 0; i < rows; i++){
+    for (int j = 0; j < cols; j++ ){
+      if (board[i][j] == OFF){
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 
