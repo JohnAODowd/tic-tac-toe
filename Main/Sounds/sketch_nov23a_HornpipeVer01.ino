@@ -4,6 +4,7 @@ Ver 01 period = 1/f in milli secs all values calculated manually on calculator
 Ver 02 all periods altered randomly to ensure a know tune is NOT used
 the differance in the change in tones is not noticable to me as a layman. 
 Ver 3 returned note values to original values added A4 minor, B4 minor, E4 Minor & B5
+Hornpipe Ver01 added A5
 */
 
 # define Col_c4 3822 // 261.63 Hz period = 1/f in milli secs
@@ -17,7 +18,7 @@ Ver 3 returned note values to original values added A4 minor, B4 minor, E4 Minor
 # define Col_b4m 2025 // 493.88 Hz
 # define Col_b4 2025 // 493.88 Hz
 # define Col_c5 1911 // 523.25 Hz
-
+# define Col_a5 1136 // 880.00 Hz
 # define Col_b5 1012 // 987.77 Hz
 
 # define rest 0
@@ -48,10 +49,14 @@ int MAXIMUM_COUNT = sizeof(colmans_tune) / 2; // Tune length i.o.t. loop
 */
 /* Ver 3 attempt at Greensleeves
 * chords from https://www.acousticmusicarchive.com/greensleeves-chords-lyrics
-*/
 int colmans_tune[] = {Col_g4, Col_d4, Col_b4m, Col_a4m, Col_b4, Col_g4, Col_d4, Col_b4m, Col_c4, Col_b5, Col_e4m};
 int colmans_beats[] = {60, 20, 20, 60, 40, 60, 20, 40, 40, 10, 30};
 int MAXIMUM_COUNT = sizeof(colmans_tune) / 2; // Tune length i.o.t. loop
+*/
+
+int hornpipe_tune[] = {Col_g4, Col_a5, Col_d4, Col_g4, Col_c4, Col_d4, Col_g4, Col_d4, Col_g4, Col_g4, Col_c4, Col_a5, Col_d4,  Col_g4, Col_c4, Col_d4, Col_g4};
+int hornpipe_beats[] = {40, 20, 20, 20, 20, 10, 8, 10, 8, 20, 20, 20, 20, 10, 10, 10, 10};
+int MAXIMUM_COUNT = sizeof(hornpipe_tune) / 2; // Tune length i.o.t. loop
 
 // tempo
 long tempo = 30000;  // Ver3 for Greensleeves original tempo lengthened from 10000 to 30000 
@@ -90,8 +95,8 @@ void play_note(){
 // Try to play the entire scale
 void loop(){
   for (int timer = 0; timer < MAXIMUM_COUNT; timer++){
-    note = colmans_tune[timer];
-    beat = colmans_beats[timer];
+    note = hornpipe_tune[timer];
+    beat = hornpipe_beats[timer];
     
     duration = beat * tempo;
     
