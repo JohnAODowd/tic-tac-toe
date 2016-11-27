@@ -38,9 +38,16 @@ void setup() {
   #ifdef DEBUG
   Serial.println(turn,DEC);
   #endif DEBUG
-  if(turn != RED && turn != YLW) game_state.yellow_player = PLYR_ONE;
-  else if(turn == RED) game_state.yellow_player = PLYR_TWO;
-  else if(turn == YLW) game_state.yellow_player = PLYR_ONE;
+  if(turn != RED && turn != YLW){
+    game_state.yellow_player = PLYR_ONE;
+    game_state.red_player = PLYR_TWO;
+  }else if(turn == RED) {
+    game_state.yellow_player = PLYR_TWO;
+    game_state.red_player = PLYR_ONE;
+  }else if(turn == YLW){
+    game_state.yellow_player = PLYR_ONE;
+    game_state.red_player = PLYR_TWO;
+  }
   game_state.state = NOT_STRTD;
 }
 
