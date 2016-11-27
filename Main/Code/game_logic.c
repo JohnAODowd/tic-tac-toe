@@ -44,9 +44,11 @@ void getPlayerInput(int irSensorValue) {
 	
 	char player;
 	if (game_state.move_num % PLYR_TURN == PLYR_TST){
-		player = PLYR_ONE;
+                if(game_state.yellow_player == PLYR_ONE) player = PLYR_ONE;
+                else if(game_state.red_player == PLYR_ONE) player = PLYR_TWO;
 	} else {
-		player = PLYR_TWO;
+                if(game_state.yellow_player == PLYR_TWO) player = PLYR_ONE;
+                else if(game_state.red_player == PLYR_TWO) player = PLYR_TWO;
 	}
 	
 	char valid_move = INVALID;
