@@ -14,6 +14,7 @@ struct game_state {
 void setupBoard() {
 }
 void invalidMove(){
+  game_state.state = INVALID_MOVE;
 }
 char isFull(){
   // Return true if board is full, false otherwise
@@ -153,6 +154,7 @@ char gameOver() {
 	// Return 1 for Draw.
         if(game_state.state == GM_LCKD) return game_state.state;
         if(game_state.state == NOT_STRTD) return game_state.state;
+        if(game_state.state == SND_HRN) return game_state.state;
 	// Check for win:
   	char winner;
 	//  vertically:
@@ -169,6 +171,7 @@ char gameOver() {
 	else if ( isFull() ) {
 		// Board full and not won - must be a Draw.
 	    	winner = DRAW;
+
 	  } else {
 		  // Board is not full, so game is not over.
 		  winner = NOT_OVER;
