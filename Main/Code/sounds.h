@@ -1,12 +1,3 @@
-/* Colman O'Keeffe 114712191 23 Nov 2016
-* note frequencies from http://www.phy.mtu.edu/~suits/notefreqs.html 1540 23 Nov 2016
-Ver 01 period = 1/f in milli secs all values calculated manually on calculator
-Ver 02 all periods altered randomly to ensure a know tune is NOT used
-the differance in the change in tones is not noticable to me as a layman. 
-Ver 3 returned note values to original values added A4 minor, B4 minor, E4 Minor & B5
-Hornpipe Ver01 added A5
-*/
-
 #define Col_c4 3822 // 261.63 Hz period = 1/f in milli secs
 #define Col_d4 3405 // 293.66 Hz all values calculated manually on calculator
 #define Col_e4m 3214 // 311.13 Hz
