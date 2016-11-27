@@ -72,3 +72,5 @@
 #define BRD_FULL 9
 #define PLYR_TURN 2
 #define PLYR_TST 1
+//EEPROM definitions
+#define TRN_ADDR 0
