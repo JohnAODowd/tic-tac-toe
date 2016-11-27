@@ -1,9 +1,10 @@
+#include <EEPROM.h>
 #ifndef DF_GUARD
 #include "defines.h"
 #endif
 #include "IRremote.h"
 #include "game_logic.c"
-#include "starting_buzzer.h"
+#include "sounds.h"
 /*
  YELLOW LEDS ON PORTS: 2,3,4
  RED LEDS ON PORTS: 5,6,7
@@ -33,8 +34,14 @@ void setup() {
   #ifdef DEBUG
   Serial.begin(9600);
   #endif
+  char turn = EEPROM.read(TRN_ADDR);
+  #ifdef DEBUG
+  Serial.println(turn,DEC);
+  #endif DEBUG
+  if(turn != RED && turn != YLW) game_state.yellow_player = PLYR_ONE;
+  else if(turn == RED) game_state.yellow_player = PLYR_TWO;
+  else if(turn == YLW) game_state.yellow_player = PLYR_ONE;
   game_state.state = NOT_STRTD;
-  game_state.yellow_player = PLYR_ONE;
 }
 
 void loop() {
@@ -136,10 +143,12 @@ void choose_color(){
   light_color(RED);
   game_state.yellow_player = PLYR_TWO; 
   game_state.red_player = PLYR_ONE;
+  EEPROM.write(TRN_ADDR,RED);
  }else if(results.value == MODE && game_state.yellow_player == PLYR_TWO){
   game_state.yellow_player = PLYR_ONE;
   game_state.red_player = PLYR_TWO;
   light_color(YLW);
+  EEPROM.write(TRN_ADDR,YLW);
  }
  irrecv.resume();
  } else{
