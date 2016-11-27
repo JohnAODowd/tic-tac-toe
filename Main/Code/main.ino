@@ -122,6 +122,7 @@ void loop() {
         case DRAW:
             light_color(RED);
             light_color(YLW);
+            break;
       }
     } 
 }
