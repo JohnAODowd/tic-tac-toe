@@ -94,91 +94,15 @@ void loop() {
       choose_color();
     }else if ((!gameOver()) && irrecv.decode(&results)) {
       // if game is being played
-    #ifdef DEBUG
-    Serial.println(results.value, HEX);
-    Serial.println(gameOver(),DEC);
-    #endif
-    if (!gameOver()){
-      //if game is not over pass in player input.
-    getPlayerInput(results.value);
-    }
-    irrecv.resume();
-    }else if(gameOver() && irrecv.decode(&results) || game_state.state == GM_LCKD && irrecv.decode(&results)){
-      // handle start new game
-      clear_pins();
-      new_game(results.value);
-      irrecv.resume();
-    } else if(game_state.state == GM_LCKD){
-      write_leds(board);
-    }else if(gameOver()){
-      // if game is over and yellow wins, light up yellow leds else light up red leds
-      switch(game_state.state){
-        case YLW_WIN:
-            light_color(YLW);
-            break;
-        case RED_WIN:
-            light_color(RED);
-            break;
+      #ifdef DEBUG
+      Serial.println(results.value, HEX);
+      Serial.println(gameOver(),DEC);
+      #endif
+      if (!gameOver()){
+        //if game is not over pass in player input.
+        getPlayerInput(results.value);
       }
-    } 
-}
-
-    if (color == YLW) for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) light_all[i][j] = YLW;
-    else if (color == RED) for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) light_all[i][j] = RED;
-    #ifdef DEBUG
-    // print out contents of light all array
-    for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) Serial.println(light_all[i][j],DEC);
-    #endif
-    write_leds(light_all);
-}
-void choose_color(){
- if(irrecv.decode(&results)){
- if(results.value == PAUSE) game_state.state = GM_RDY;
- else if(results.value == MODE && game_state.yellow_player == PLYR_ONE){
-  light_color(RED);
-  game_state.yellow_player = PLYR_TWO; 
-  game_state.red_player = PLYR_TWO;
- }else if(results.value == MODE && game_state.yellow_player == PLYR_TWO){
-  game_state.yellow_player = PLYR_ONE;
-  game_state.red_player = PLYR_TWO;
-  light_color(YLW);
- }
- irrecv.resume();
- } else{
- if(game_state.yellow_player == PLYR_ONE) light_color(YLW);
- else if(game_state.yellow_player == PLYR_TWO) light_color(RED);
- }
-}
-
-void setup() {
-  // put your setup code here, to run once:
-  DDRD |= DDRD_PINS;
-  DDRB |= DDRB_PINS;
-  clear_pins();
-  irrecv.enableIRIn();
-  #ifdef DEBUG
-  Serial.begin(9600);
-  #endif
-  game_state.state = NOT_STRTD;
-  game_state.yellow_player = PLYR_ONE;
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-    if (!gameOver()) write_leds(board); 
-    if (game_state.state == NOT_STRTD){
-      choose_color();
-    }else if ((!gameOver()) && irrecv.decode(&results)) {
-      // if game is being played
-    #ifdef DEBUG
-    Serial.println(results.value, HEX);
-    Serial.println(gameOver(),DEC);
-    #endif
-    if (!gameOver()){
-      //if game is not over pass in player input.
-    getPlayerInput(results.value);
-    }
-    irrecv.resume();
+      irrecv.resume();
     }else if(gameOver() && irrecv.decode(&results) || game_state.state == GM_LCKD && irrecv.decode(&results)){
       // handle start new game
       clear_pins();
@@ -195,6 +119,9 @@ void loop() {
         case RED_WIN:
             light_color(RED);
             break;
+        case DRAW:
+            light_color(RED);
+            light_color(YLW);
       }
     } 
 }
