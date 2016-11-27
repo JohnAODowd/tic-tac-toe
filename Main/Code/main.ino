@@ -61,7 +61,7 @@ void choose_color(){
  else if(results.value == MODE && game_state.yellow_player == PLYR_ONE){
   light_color(RED);
   game_state.yellow_player = PLYR_TWO; 
-  game_state.red_player = PLYR_TWO;
+  game_state.red_player = PLYR_ONE;
  }else if(results.value == MODE && game_state.yellow_player == PLYR_TWO){
   game_state.yellow_player = PLYR_ONE;
   game_state.red_player = PLYR_TWO;
