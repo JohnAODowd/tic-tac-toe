@@ -11,15 +11,13 @@ struct game_state {
   char yellow_player;
   char red_player;
 } game_state;
-void setupBoard() {
-}
-void invalidMove(){
-}
+
 char isFull(){
   // Return true if board is full, false otherwise
   if(game_state.move_num == BRD_FULL) return 1;
   else return NOT_OVER;
 }
+
 void clearBoard(){
   // Set the value of each position in the board to OFF.
   char i,j;
@@ -30,6 +28,7 @@ void clearBoard(){
   }
   game_state.state = NOT_STRTD;
 }
+
 void new_game(int input){
   switch(input){
     case BACK:
@@ -39,6 +38,7 @@ void new_game(int input){
         clearBoard();
   }
 }
+
 void getPlayerInput(int irSensorValue) {
 	
 	char player;
@@ -53,12 +53,10 @@ void getPlayerInput(int irSensorValue) {
 		    // Setup cases for the return value IR Remote Sensor. 
 
 		    case ZERO:
-		    // Number 0 Returned 
 		      clearBoard();
 		      break;
 
 		    case ONE:
-		    // Number 1 Returned
 		      if (!TOP_RIGHT) {
 		      if (player) TOP_RIGHT = RED;
 		      else TOP_RIGHT = YLW;
@@ -67,7 +65,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case TWO:
-		    // Number 2 Returned
 		      if(!TOP_MID){
 		      if (player) TOP_MID = RED;
 		      else TOP_MID = YLW;
@@ -76,7 +73,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case THREE:
-		    // Number 3 Returned
 		      if(!TOP_LEFT){
 		      if (player) TOP_LEFT = RED;
 		      else TOP_LEFT = YLW;
@@ -85,7 +81,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case FOUR:
-		    // Number 4 Returned 
 		      if(!MID_RIGHT){		
 		      if (player) MID_RIGHT = RED;
 		      else MID_RIGHT = YLW;
@@ -94,7 +89,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case FIVE:
-		    // Number 5 Returned
 		      if(!MID_MID){	
 		      if (player) MID_MID = RED;
 		      else MID_MID = YLW;
@@ -103,7 +97,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case SIX:
-		    // Number 6 Returned
 		      if(!MID_LEFT){
 		      if (player) MID_LEFT = RED;
 		      else MID_LEFT = YLW;
@@ -112,7 +105,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case SEVEN:
-		    // Number 7 Returned
 		      if(!BOT_RIGHT){	
 		      if (player) BOT_RIGHT = RED;
 		      else BOT_RIGHT = YLW;
@@ -121,7 +113,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case EIGHT:
-		    // Number 8 Returned
 		      if(!BOT_MID){	
 		      if (player) BOT_MID = RED;
 		      else BOT_MID = YLW;
@@ -130,7 +121,6 @@ void getPlayerInput(int irSensorValue) {
 		      break;
 
 		    case NINE:
-		    // Number 9 Returned 
 		      if(!BOT_LEFT){
 		      if (player) BOT_LEFT = RED;
 		      else BOT_LEFT = YLW;
@@ -173,10 +163,7 @@ char gameOver() {
 	}
         game_state.state = winner;
 	char game_finish_state;
-	if ((winner == YLW_WIN) || (winner == RED_WIN) || (winner == DRAW)) {
-		game_finish_state = 1;
-	} else if (winner == NOT_OVER){
-		game_finish_state = 0;
-	} 
+	if ((winner == YLW_WIN) || (winner == RED_WIN) || (winner == DRAW)) game_finish_state = 1;
+	else if (winner == NOT_OVER) game_finish_state = 0;
 	return game_finish_state;
 }
