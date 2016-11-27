@@ -2,7 +2,7 @@
 //#define DEBUG
 // PIN STATES
 #define DDRD_PINS 0xFC
-#define DDRB_PINS 0x7
+#define DDRB_PINS 0x17
 #define CLR 0x0
 // LED VALUES
 #define ROW1 0x6
@@ -20,8 +20,8 @@
 // LED STATES
 #define RED -1
 #define YLW 1
+#define NONE 0
 #define OFF 0
-
 #define IR_PIN 11
 // IR_REMOTE VALUES
 #define ZERO 0xFF6897
@@ -52,6 +52,8 @@
 #define NOT_OVER 0
 #define GM_LCKD 4
 #define GM_RDY 5
+#define SND_HRN 6
+#define INVALID_MOVE 7
 #define VALID 1
 #define INVALID 0
 #define TOP_RIGHT board[0][0]
