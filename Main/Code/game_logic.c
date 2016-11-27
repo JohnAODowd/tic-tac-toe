@@ -169,7 +169,6 @@ char gameOver() {
 	else if ( isFull() ) {
 		// Board full and not won - must be a Draw.
 	    	winner = DRAW;
-
 	  } else {
 		  // Board is not full, so game is not over.
 		  winner = NOT_OVER;
