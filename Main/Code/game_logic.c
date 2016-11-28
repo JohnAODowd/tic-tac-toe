@@ -2,6 +2,7 @@
 
 // Include definitions
 #include "defines.h"
+#include "sounds.h"
 
 // Setup a two-dimensional 3x3 array. 
 static char board[LED_CNT][LED_CNT] ={ {OFF, OFF, OFF}, {OFF, OFF, OFF}, {OFF, OFF, OFF} };
@@ -10,6 +11,8 @@ struct game_state {
   char move_num;
   char yellow_player;
   char red_player;
+  char mute_state;
+  char saved;
 } game_state;
 void setupBoard() {
 }
@@ -39,6 +42,11 @@ void new_game(int input){
         break;
     case ZERO:
         clearBoard();
+        break;
+    case MUTE:
+        if(game_state.mute_state) game_state.mute_state = SOUND_OFF;
+        else game_state.mute_state = SOUND_ON;
+        break;
   }
 }
 void getPlayerInput(int irSensorValue) {
@@ -141,6 +149,13 @@ void getPlayerInput(int irSensorValue) {
 		      valid_move = VALID;
 		      } else invalidMove();
 		      break;
+                    case MUTE:
+                      if(game_state.mute_state) game_state.mute_state = SOUND_OFF;
+                      else game_state.mute_state = SOUND_ON;
+                      break;
+                    case EQ:
+                      game_state.state = SV_GM;
+                      break;
 		}
 	if (valid_move) game_state.move_num++;
 }
