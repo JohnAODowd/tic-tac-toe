@@ -45,6 +45,8 @@ void setup(){
 void draw(){
   if(!DEBUG && myPort.available() > 0){
     val = myPort.readStringUntil('\n');
+    int led = Integer.parseInt(val);
     println(val);
+    println(led);
   }
 }
