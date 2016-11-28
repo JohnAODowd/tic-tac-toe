@@ -1,20 +1,46 @@
 import processing.serial.*;
-
+static boolean DEBUG = false;
 Serial myPort;
 String val;
 final static int COM_PORT = 0;
+final static int LED_SIZE = 30;
+final static int LED_OFFSET = 15;
+final static int LED_START = 55;
+final static int COLUMN_2 = (LED_START + LED_SIZE + LED_OFFSET);
+final static int COLUMN_3 = (LED_START + (LED_SIZE * 2) + (LED_OFFSET * 2));
+final static int[][][] COORDS = {{{LED_START,LED_START},
+                                  {LED_START,COLUMN_2},
+                                  {LED_START,COLUMN_3}},
+                                 {{COLUMN_2,LED_START},
+                                  {COLUMN_2,COLUMN_2},
+                                  {COLUMN_2,COLUMN_3}},
+                                 {{COLUMN_3,LED_START},
+                                  {COLUMN_3,COLUMN_2},
+                                  {COLUMN_3,COLUMN_3}
+                                }};
+
 void setup(){
   // Serial.list()[0] opens COM1 on windows;
   // Change COM_PORT to the one that arduino
   // is connected to.
   size(200,200);
   background(255);
-  ellipse(20,20,0,0);
-  String portName = Serial.list()[COM_PORT];
-  myPort = new Serial(this,portName,9600);
+  stroke(30);
+  fill(30);
+  for(int[][] row: COORDS){
+    for(int[] led : row){
+      ellipse(led[0],led[1],LED_SIZE,LED_SIZE);
+    }
+  }
+  try{
+    String portName = Serial.list()[COM_PORT];
+    myPort = new Serial(this,portName,9600);
+  }catch(ArrayIndexOutOfBoundsException e){
+    DEBUG = true;
+  }
 }
 void draw(){
-  if(myPort.available() > 0){
+  if(!DEBUG && myPort.available() > 0){
     val = myPort.readStringUntil('\n');
     println(val);
   }
