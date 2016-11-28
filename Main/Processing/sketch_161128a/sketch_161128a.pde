@@ -2,15 +2,20 @@ import processing.serial.*;
 static boolean DEBUG = false;
 Serial myPort;
 String val;
+final static int BAUD = 300;
 final static int COM_PORT = 0;
 final static int LED_SIZE = 30;
 final static int LED_OFFSET = 15;
 final static int LED_START = 55;
 final static int COLUMN_2 = (LED_START + LED_SIZE + LED_OFFSET);
 final static int COLUMN_3 = (LED_START + (LED_SIZE * 2) + (LED_OFFSET * 2));
+final static int INCOMING_DATA_SIZE = 3; 
+final static int BLCK_COL[] = {0,0,0};
+final static int RED_COL[] = {227,0,116}; // color for red
+final static int YLW_COL[] = {238,186,48}; // color for yellow
+final static int YLW_LD = 1;
+final static int RED_LD = -1;
 final static int EMPTY = 0;
-final static int RED = 255; // color for red
-final static int YLW = 255; // color for yellow
 int[][][] COORDS = {{{LED_START,LED_START,EMPTY},
                      {LED_START,COLUMN_2,EMPTY},
                      {LED_START,COLUMN_3,EMPTY}},
@@ -23,31 +28,57 @@ int[][][] COORDS = {{{LED_START,LED_START,EMPTY},
                     }};
 
 void setup(){
-  // Serial.list()[0] opens COM1 on windows;
-  // Change COM_PORT to the one that arduino
-  // is connected to.
   size(200,200);
-  background(255);
-  for(int[][] row: COORDS){
-    for(int[] led : row){
-      stroke(led[2]);
-      fill(led[2]);
-      ellipse(led[0],led[1],LED_SIZE,LED_SIZE);
-    }
-  }
+  frameRate(BAUD);
+  redraw();
+  loop();
   try{
     String portName = Serial.list()[COM_PORT];
-    myPort = new Serial(this,portName,9600);
+    myPort = new Serial(this,portName,BAUD);
   }catch(ArrayIndexOutOfBoundsException e){
     DEBUG = true;
   }
 }
 void draw(){
-//use while loop for displaying stuff
   if(!DEBUG && myPort.available() > 0){
-    val = myPort.readStringUntil('\n');
-    int led = Integer.parseInt(val);
-    println(val);
-    println(led);
+    try{
+      val = myPort.readStringUntil('\n').trim();
+      String[] display_values = val.split(",");
+      int[] incoming_data = new int[(display_values.length)];
+      for(int i = 0;i<display_values.length;i++){
+        incoming_data[i] = Integer.parseInt(display_values[i]);
+      }
+      COORDS[incoming_data[0]][incoming_data[1]][2] = incoming_data[2];
+      //println(val);      
+    } catch(Exception e){
+      //print(e.toString());
+    }
+  }
+  redraw();
+}
+void redraw(){
+  drawLEDS();
+  //println(COORDS[0][1][2]);
+}
+void drawLEDS(){
+  background(255);
+  for(int[][] row: COORDS){
+    for(int[] led : row){
+      switch(led[2]){
+       case RED_LD: 
+            stroke(RED_COL[0],RED_COL[1],RED_COL[2]);
+            fill(RED_COL[0],RED_COL[1],RED_COL[2]);
+            break;
+       case YLW_LD:
+            stroke(YLW_COL[0],YLW_COL[1],YLW_COL[2]);
+            fill(YLW_COL[0],YLW_COL[1],YLW_COL[2]);
+            break;
+       case EMPTY:
+            stroke(BLCK_COL[0],BLCK_COL[1],BLCK_COL[2]);
+            fill(BLCK_COL[0],BLCK_COL[1],BLCK_COL[2]);
+            break;
+      }
+      ellipse(led[0],led[1],LED_SIZE,LED_SIZE);
+    }
   }
 }
