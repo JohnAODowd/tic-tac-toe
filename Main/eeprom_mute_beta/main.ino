@@ -52,11 +52,11 @@ void setup() {
     game_state.yellow_player = PLYR_ONE;
     game_state.red_player = PLYR_TWO;
   }
-  char mute = EEPROM.read(MUTE_ADDR);
-  if (mute == SOUND_ON || mute == SOUND_OFF){
+  char saved = EEPROM.read(SAVE_ADDR);
+  if (saved){
     game_state.state = EEPROM.read(STATE_ADDR);
     game_state.move_num = EEPROM.read(MOVE_ADDR);
-    game_state.mute_state = mute;
+    game_state.mute_state = EEPROM.read(MUTE_ADDR);
     TOP_RIGHT = EEPROM.read(BRD1);
     TOP_MID = EEPROM.read(BRD2);
     TOP_LEFT = EEPROM.read(BRD3);
@@ -75,18 +75,18 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if(game_state.state == INVALID_MOVE) invalid_move();
+    if(game_state.state == INVALID_MOVE) invalid_move();
+    if (game_state.state == SV_GM){
+      save_game();
+      game_state.state = GM_RDY;
+    }
     if (!gameOver()) write_leds(board); 
     if (game_state.state == NOT_STRTD){
-      if(!game_state.saved) save_game();
       choose_color();
     }else if(game_state.state == SND_HRN){
       horn_pipe();
       game_state.state = GM_RDY;
-    }else if (game_state.state == SV_GM){
-      save_game();
-      game_state.state = GM_RDY;
-    } else if ((!gameOver()) && irrecv.decode(&results)) {
+    }else if ((!gameOver()) && irrecv.decode(&results)) {
       // if game is being played
       #ifdef DEBUG
       Serial.println(results.value, HEX);
@@ -95,12 +95,14 @@ void loop() {
       if (!gameOver()){
         //if game is not over pass in player input.
         getPlayerInput(results.value);
+        if(results.value == ZERO) save_game();
       }
       irrecv.resume();
     }else if(gameOver() && irrecv.decode(&results) || game_state.state == GM_LCKD && irrecv.decode(&results)){
       // handle start new game
       clear_pins();
       new_game(results.value);
+      if(results.value == ZERO) save_game();
       irrecv.resume();
     } else if(game_state.state == GM_LCKD){
       write_leds(board);
@@ -205,6 +207,7 @@ void save_game(){
   EEPROM.write(BRD7,BOT_RIGHT);
   EEPROM.write(BRD8,BOT_MID);
   EEPROM.write(BRD9,BOT_LEFT);
+  EEPROM.write(SAVE_ADDR,SVD);
   game_state.saved = SVD;
 }
 void victory_tune(char col){
