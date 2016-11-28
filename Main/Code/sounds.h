@@ -1,3 +1,12 @@
+/* Colman O'Keeffe 114712191 23 Nov 2016
+* note frequencies from http://www.phy.mtu.edu/~suits/notefreqs.html 1540 23 Nov 2016
+Ver 01 period = 1/f in milli secs all values calculated manually on calculator
+Ver 02 all periods altered randomly to ensure a know tune is NOT used
+the differance in the change in tones is not noticable to me as a layman. 
+Ver 3 returned note values to original values added A4 minor, B4 minor, E4 Minor & B5
+Hornpipe Ver01 added A5
+*/
+#define SOUND_GRD
 #define Col_c4 3822 // 261.63 Hz period = 1/f in milli secs
 #define Col_d4 3405 // 293.66 Hz all values calculated manually on calculator
 #define Col_e4m 3214 // 311.13 Hz
@@ -11,6 +20,8 @@
 #define Col_c5 1911 // 523.25 Hz
 #define Col_a5 1136 // 880.00 Hz
 #define Col_b5 1012 // 987.77 Hz
+#define SOUND_ON 1
+#define SOUND_OFF 0
 #define rest 0
 #define buzzer_out 12
 static int note = 0;
@@ -33,3 +44,4 @@ static int StartingBuzzer_MAXIMUM_COUNT = sizeof(StartingBuzzer_tune) / sizeof(i
 #define pause 5000 // original pause increased from 1000 to 5000
 // add to loop to pause for 1 sec
 static int rest_count = 100;
+
