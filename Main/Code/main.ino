@@ -1,10 +1,13 @@
 #include <EEPROM.h>
+#include "game_logic.c"
 #ifndef DF_GUARD
 #include "defines.h"
 #endif
-#include "IRremote.h"
-#include "game_logic.c"
+#ifndef SOUND_GRD
 #include "sounds.h"
+#endif
+#include "IRremote.h"
+
 /*
  YELLOW LEDS ON PORTS: 2,3,4
  RED LEDS ON PORTS: 5,6,7
@@ -24,6 +27,8 @@ void choose_color();
 void play_note(char col);
 void horn_pipe();
 void victory_tune();
+void save_game();
+void print_board();
 
 void setup() {
   // put your setup code here, to run once:
@@ -31,9 +36,7 @@ void setup() {
   DDRB |= DDRB_PINS;
   clear_pins();
   irrecv.enableIRIn();
-  #ifdef DEBUG
   Serial.begin(9600);
-  #endif
   char turn = EEPROM.read(TRN_ADDR);
   #ifdef DEBUG
   Serial.println(turn,DEC);
@@ -48,19 +51,42 @@ void setup() {
     game_state.yellow_player = PLYR_ONE;
     game_state.red_player = PLYR_TWO;
   }
-  game_state.state = NOT_STRTD;
+  char saved = EEPROM.read(SAVE_ADDR);
+  if (saved){
+    game_state.state = EEPROM.read(STATE_ADDR);
+    game_state.move_num = EEPROM.read(MOVE_ADDR);
+    game_state.mute_state = EEPROM.read(MUTE_ADDR);
+    TOP_RIGHT = EEPROM.read(BRD1);
+    TOP_MID = EEPROM.read(BRD2);
+    TOP_LEFT = EEPROM.read(BRD3);
+    MID_RIGHT = EEPROM.read(BRD4);
+    MID_MID = EEPROM.read(BRD5);
+    MID_LEFT = EEPROM.read(BRD6);
+    BOT_RIGHT = EEPROM.read(BRD7);
+    BOT_MID = EEPROM.read(BRD8);
+    BOT_LEFT = EEPROM.read(BRD9);
+  } else{
+    game_state.mute_state = SOUND_ON;
+    game_state.state = NOT_STRTD;
+  }
+  game_state.saved = NTSVD;
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if(game_state.state == INVALID_MOVE) invalid_move();
+    //print_board();
+    if(game_state.state == INVALID_MOVE) invalid_move();
+    if (game_state.state == SV_GM){
+      save_game();
+      game_state.state = GM_RDY;
+    }
     if (!gameOver()) write_leds(board); 
     if (game_state.state == NOT_STRTD){
       choose_color();
     }else if(game_state.state == SND_HRN){
       horn_pipe();
       game_state.state = GM_RDY;
-    } else if ((!gameOver()) && irrecv.decode(&results)) {
+    }else if ((!gameOver()) && irrecv.decode(&results)) {
       // if game is being played
       #ifdef DEBUG
       Serial.println(results.value, HEX);
@@ -69,12 +95,14 @@ void loop() {
       if (!gameOver()){
         //if game is not over pass in player input.
         getPlayerInput(results.value);
+        if(results.value == ZERO) save_game();
       }
       irrecv.resume();
     }else if(gameOver() && irrecv.decode(&results) || game_state.state == GM_LCKD && irrecv.decode(&results)){
       // handle start new game
       clear_pins();
       new_game(results.value);
+      if(results.value == ZERO) save_game();
       irrecv.resume();
     } else if(game_state.state == GM_LCKD){
       write_leds(board);
@@ -163,6 +191,43 @@ void choose_color(){
  else if(game_state.yellow_player == PLYR_TWO) light_color(RED);
  }
 }
+void save_game(){
+  /*
+  Saves the game to EEPROM
+  */
+  EEPROM.write(STATE_ADDR,game_state.state);
+  EEPROM.write(MOVE_ADDR,game_state.move_num);
+  EEPROM.write(MUTE_ADDR,game_state.mute_state);
+  EEPROM.write(BRD1,TOP_RIGHT);
+  EEPROM.write(BRD2,TOP_MID);
+  EEPROM.write(BRD3,TOP_LEFT);
+  EEPROM.write(BRD4,MID_RIGHT);
+  EEPROM.write(BRD5,MID_MID);
+  EEPROM.write(BRD6,MID_LEFT);
+  EEPROM.write(BRD7,BOT_RIGHT);
+  EEPROM.write(BRD8,BOT_MID);
+  EEPROM.write(BRD9,BOT_LEFT);
+  EEPROM.write(SAVE_ADDR,SVD);
+  game_state.saved = SVD;
+}
+void print_board(){
+  Serial.print(TOP_RIGHT,DEC);
+  Serial.print("|");
+  Serial.print(TOP_MID,DEC);
+  Serial.print("|");
+  Serial.println(TOP_LEFT,DEC);
+  Serial.print(MID_RIGHT,DEC);
+  Serial.print("|");
+  Serial.print(MID_MID,DEC);
+  Serial.print("|");
+  Serial.println(MID_LEFT,DEC);
+  Serial.print(BOT_RIGHT,DEC);
+  Serial.print("|");
+  Serial.print(BOT_MID,DEC);
+  Serial.print("|");
+  Serial.println(BOT_LEFT,DEC);
+  Serial.println();
+}
 void victory_tune(char col){
     for(int timer = 0; timer < colmans_MAXIMUM_COUNT; timer++){
     note = colmans_tune[timer];
@@ -172,7 +237,7 @@ void victory_tune(char col){
     light_color(col);
     play_note(col);
     light_color(col);
-    delayMicroseconds(pause);
+    if(game_state.mute_state) delayMicroseconds(pause);
   }
 }
 static void invalid_move(){
@@ -182,8 +247,7 @@ static void invalid_move(){
     
     duration = beat * tempo;
     play_note(NONE);
-    
-    delayMicroseconds(pause);
+    if(game_state.mute_state) delayMicroseconds(pause);
   }
 } 
 void horn_pipe(){
@@ -193,8 +257,7 @@ void horn_pipe(){
     
     duration = beat * tempo;
     play_note(NONE);
-    
-    delayMicroseconds(pause);
+    if(game_state.mute_state) delayMicroseconds(pause);
   }
 }
 void play_note(char col){
@@ -203,12 +266,12 @@ void play_note(char col){
     while(time_so_far < duration){
       // buzzer on
       if(col==YLW || col == RED) light_color(col);
-      digitalWrite(buzzer_out, HIGH);
-      delayMicroseconds(note / 2);
+      if(game_state.mute_state) digitalWrite(buzzer_out, HIGH);
+      if(game_state.mute_state) delayMicroseconds(note / 2);
       if(col==YLW || col == RED) light_color(col);
       // buzzer off
-      digitalWrite(buzzer_out, LOW);
-      delayMicroseconds(note / 2);
+      if(game_state.mute_state) digitalWrite(buzzer_out, LOW);
+      if(game_state.mute_state) delayMicroseconds(note / 2);
       if(col==YLW || col == RED) light_color(col);
       // how much time has gone by
       time_so_far += (note);
@@ -216,7 +279,7 @@ void play_note(char col){
   }
   else{
     for (int restbeat = 0; restbeat < rest_count; restbeat++){
-      delayMicroseconds(duration);
+      if(game_state.mute_state) delayMicroseconds(duration);
     }
   }
 }
