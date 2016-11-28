@@ -34,17 +34,23 @@ void setup(){
 }
 
 void draw(){
-  while(myPort.available() > 0){
+  if(myPort.available() > 0){
     try{
       val = myPort.readStringUntil('\n').trim();
       String[] display_values = val.split(",");
-      int[] incoming_data = new int[(display_values.length)];
-      for(int i = 0;i<display_values.length;i++){
-        incoming_data[i] = Integer.parseInt(display_values[i]);
+      if (display_values.length > 2){
+        int[] incoming_data = new int[(display_values.length)];
+        for(int i = 0;i<display_values.length;i++){
+          incoming_data[i] = Integer.parseInt(display_values[i]);
+        }
+        COORDS[incoming_data[0]][incoming_data[1]][2] = incoming_data[2];
       }
-      COORDS[incoming_data[0]][incoming_data[1]][2] = incoming_data[2];
-      drawLEDS();   
-    } catch(Exception e){
+      drawLEDS();  
+    }catch(NumberFormatException numEx){
+      print("Loading.");
+    }catch(Exception e){
+      print(".");
+      //System.exit(1);
     }
   }
 }
