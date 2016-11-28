@@ -43,6 +43,7 @@ void setup(){
   }
 }
 void draw(){
+//use while loop for displaying stuff
   if(!DEBUG && myPort.available() > 0){
     val = myPort.readStringUntil('\n');
     int led = Integer.parseInt(val);
