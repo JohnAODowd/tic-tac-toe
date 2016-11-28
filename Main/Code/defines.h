@@ -53,6 +53,7 @@
 #define GM_LCKD 4
 #define GM_RDY 5
 #define SND_HRN 6
+#define SV_GM 8
 #define INVALID_MOVE 7
 #define VALID 1
 #define INVALID 0
@@ -73,4 +74,19 @@
 #define PLYR_TURN 2
 #define PLYR_TST 1
 //EEPROM definitions
+#define SVD 1
+#define NTSVD 0
 #define TRN_ADDR 0
+#define STATE_ADDR 1
+#define MOVE_ADDR 2
+#define BRD1 3
+#define BRD2 4
+#define BRD3 5
+#define BRD4 6
+#define BRD5 7
+#define BRD6 8
+#define BRD7 9
+#define BRD8 10
+#define BRD9 11
+#define MUTE_ADDR 12
+#define SAVE_ADDR 13
