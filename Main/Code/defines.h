@@ -90,3 +90,11 @@
 #define BRD9 11
 #define MUTE_ADDR 12
 #define SAVE_ADDR 13
+// Processing definitions:
+#define BAUD 9600
+#define ROW1_ 0
+#define ROW2_ 1
+#define ROW3_ 2
+#define COL1_ 0
+#define COL2_ 1
+#define COl3_ 2
