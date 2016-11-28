@@ -20,7 +20,8 @@ IRrecv irrecv(IR_PIN);
 decode_results results;
 void invalid_move();
 void clear_pins();
-void light_led();
+void light_led(char led, char row);
+void light_led(char led, char row,char index_row,char index_col,char color);
 void write_ledS(char arr[LED_CNT][LED_CNT]);
 void light_color(char color);
 void choose_color();
@@ -29,6 +30,7 @@ void horn_pipe();
 void victory_tune();
 void save_game();
 void print_board();
+void write_empty(char col,char row);
 
 void setup() {
   // put your setup code here, to run once:
@@ -36,7 +38,7 @@ void setup() {
   DDRB |= DDRB_PINS;
   clear_pins();
   irrecv.enableIRIn();
-  Serial.begin(9600);
+  Serial.begin(BAUD);
   char turn = EEPROM.read(TRN_ADDR);
   #ifdef DEBUG
   Serial.println(turn,DEC);
@@ -136,6 +138,21 @@ void light_led(char led, char row){
   PORTB |= row;
   PORTD |= led;
 }
+void light_led(char led, char row,char index_row,char index_col,char color){
+  light_led(led,row);
+  Serial.print(index_col,DEC);
+  Serial.print(SEP);
+  Serial.print(index_row,DEC);
+  Serial.print(SEP);
+  Serial.println(color,DEC);
+}
+void write_empty(char col,char row){
+  Serial.print(col,DEC);
+  Serial.print(SEP);
+  Serial.print(row,DEC);
+  Serial.print(SEP);
+  Serial.println(EMPTY_,DEC);
+}
 void write_leds(char arr[LED_CNT][LED_CNT]){
   /*
     Light corresponding leds (RED or YLW) or none,
@@ -144,10 +161,10 @@ void write_leds(char arr[LED_CNT][LED_CNT]){
   for(char j = 0;j < LED_CNT;j++){
     for(char i = 0;i < LED_CNT;i++){
       if((arr[j][i]) == RED){
-        light_led(REDS[i],ROWS[j]);
+        light_led(REDS[i],ROWS[j],j,i,RED);
       } else if(arr[j][i] == YLW){
-        light_led(YLWS[i],ROWS[j]);
-      }
+        light_led(YLWS[i],ROWS[j],j,i,YLW);
+      }else write_empty(i,j);
       delay(RFRSH_RT);
       clear_pins();
     }
