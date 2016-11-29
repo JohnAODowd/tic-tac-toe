@@ -91,6 +91,6 @@
 #define MUTE_ADDR 12
 #define SAVE_ADDR 13
 // Processing definitions:
-#define BAUD 57600
+#define BAUD 115200
 #define EMPTY_ 0
 #define SEP ","

@@ -1,7 +1,7 @@
 import processing.serial.*;
 Serial myPort;
 String val;
-final static int BAUD = 57600;
+final static int BAUD = 115200;
 final static int COM_PORT = 0;
 final static int LED_SIZE = 30;
 final static int LED_OFFSET = 15;
