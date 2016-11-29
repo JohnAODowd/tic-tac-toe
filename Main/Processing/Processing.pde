@@ -94,5 +94,13 @@ void mouseClicked(){
     } else if(mouseY > COORDS[0][2][1] && mouseY < (COORDS[0][2][1]+LED_SIZE)){
       myPort.write(LD7);
     }
-  }   
+  } /*else if (mouseX > COORDS[0][0][1] && mouseX <(COORDS[0][0][1]+LED_SIZE)){
+    if(mouseY > COORDS[0][0][1] && mouseY < (COORDS[0][0][1]+LED_SIZE)){
+      myPort.write(LD1);
+    } else if(mouseY > COORDS[0][1][1] && mouseY < (COORDS[0][1][1]+LED_SIZE)){
+      myPort.write(LD4);
+    } else if(mouseY > COORDS[0][2][1] && mouseY < (COORDS[0][2][1]+LED_SIZE)){
+      myPort.write(LD7);
+    }
+  }*/
 }
