@@ -87,6 +87,8 @@ void drawLEDS(){
 }
 void mouseClicked(){
   if(mouseX > COORDS[0][0][0] && mouseX <(COORDS[0][0][0]+LED_SIZE)){
-    myPort.write(LD1);
+    if(mouseY > COORDS[0][0][1] && mouseY < (COORDS[0][0][1]+LED_SIZE){
+      myPort.write(LD1);
+    }
   }
 }
