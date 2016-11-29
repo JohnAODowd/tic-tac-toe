@@ -165,7 +165,6 @@ void getPlayerInput(int irSensorValue) {
 	if (valid_move) game_state.move_num++;
 }
 char gameOver() {
-	
 	// Game is over when there is a draw or when there is a win.
 	// Return true if game is over, false otherwise.
         if(game_state.state == GM_LCKD) return game_state.state;
