@@ -89,13 +89,10 @@ void mouseClicked(){
   if(mouseX > COORDS[0][0][0] && mouseX <(COORDS[0][0][0]+LED_SIZE)){
     if(mouseY > COORDS[0][0][1] && mouseY < (COORDS[0][0][1]+LED_SIZE)){
       myPort.write(LD1);
-      print(LD1);
     } else if(mouseY > COORDS[0][1][1] && mouseY < (COORDS[0][1][1]+LED_SIZE)){
       myPort.write(LD4);
-      print(LD2);
     } else if(mouseY > COORDS[0][2][1] && mouseY < (COORDS[0][2][1]+LED_SIZE)){
       myPort.write(LD7);
-      print(LD3);
     }
   }   
 }
