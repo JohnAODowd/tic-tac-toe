@@ -13,9 +13,9 @@ struct game_state {
   char red_player;
   char mute_state;
   char saved;
+  char refresh;
 } game_state;
-void setupBoard() {
-}
+
 void invalidMove(){
   game_state.state = INVALID_MOVE;
 }
@@ -35,11 +35,13 @@ void clearBoard(){
   }
   game_state.state = NOT_STRTD;
   game_state.move_num = 0;
+  game_state.refresh = VALID;
 }
 void new_game(int input){
   switch(input){
     case BACK:
         game_state.state = GM_LCKD;
+        game_state.refresh = VALID;
         break;
     case ZERO:
         clearBoard();
@@ -162,7 +164,10 @@ void getPlayerInput(int irSensorValue) {
                       game_state.state = SV_GM;
                       break;
 		}
-	if (valid_move) game_state.move_num++;
+	if (valid_move) {
+	  game_state.move_num++;
+    game_state.refresh = VALID;
+	}
 }
 char gameOver() {
 	// Game is over when there is a draw or when there is a win.
@@ -195,6 +200,7 @@ char gameOver() {
 	char game_finish_state;
 	if ((winner == YLW_WIN) || (winner == RED_WIN) || (winner == DRAW)) {
 		game_finish_state = 1;
+    game_state.refresh = VALID;
 	} else if (winner == NOT_OVER){
 		game_finish_state = 0;
 	} 
