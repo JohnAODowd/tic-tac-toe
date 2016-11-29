@@ -86,29 +86,29 @@ void drawLEDS(){
   }
 }
 void mouseClicked(){
-  if(mouseX > COORDS[0][0][0] && mouseX <(COORDS[0][0][0]+LED_SIZE)){
-    if(mouseY > COORDS[0][0][1] && mouseY < (COORDS[0][0][1]+LED_SIZE)){
+  if(mouseX > (COORDS[0][0][0]-(LED_SIZE/2)) && mouseX <(COORDS[0][0][0]+(LED_SIZE/2))){
+    if(mouseY > (COORDS[0][0][1]-(LED_SIZE/2)) && mouseY < (COORDS[0][0][1]+(LED_SIZE/2))){
       myPort.write(LD1);
-    } else if(mouseY > COORDS[0][1][1] && mouseY < (COORDS[0][1][1]+LED_SIZE)){
+    } else if(mouseY > (COORDS[0][1][1]-(LED_SIZE/2)) && mouseY < (COORDS[0][1][1]+(LED_SIZE/2))){
       myPort.write(LD4);
-    } else if(mouseY > COORDS[0][2][1] && mouseY < (COORDS[0][2][1]+LED_SIZE)){
+    } else if(mouseY > (COORDS[0][2][1]-(LED_SIZE/2)) && mouseY < (COORDS[0][2][1]+(LED_SIZE/2))){
       myPort.write(LD7);
     }
-  } else if (mouseX > COORDS[0][0][1] && mouseX <(COORDS[0][0][1]+LED_SIZE)){
-    if(mouseY > COORDS[0][0][1] && mouseY < (COORDS[0][0][1]+LED_SIZE)){
+  } else if (mouseX > (COORDS[0][1][1]-(LED_SIZE/2)) && mouseX <(COORDS[0][1][1]+(LED_SIZE/2))){
+    if(mouseY > (COORDS[1][0][1]-(LED_SIZE/2)) && mouseY < (COORDS[1][0][1]+(LED_SIZE/2))){
       myPort.write(LD2);
-    } else if(mouseY > COORDS[0][1][1] && mouseY < (COORDS[0][1][1]+LED_SIZE)){
+    } else if(mouseY > (COORDS[1][1][1]-(LED_SIZE/2)) && mouseY < (COORDS[1][1][1]+(LED_SIZE/2))){
       myPort.write(LD5);
-    } else if(mouseY > COORDS[0][2][1] && mouseY < (COORDS[0][2][1]+LED_SIZE)){
+    } else if(mouseY > (COORDS[1][2][1]-(LED_SIZE/2)) && mouseY < (COORDS[1][2][1]+(LED_SIZE/2))){
       myPort.write(LD8);
     }
-  }else if (mouseX > COORDS[0][0][2] && mouseX <(COORDS[0][0][2]+LED_SIZE)){
-    if(mouseY > COORDS[0][0][1] && mouseY < (COORDS[0][0][1]+LED_SIZE)){
-      myPort.write(LD2);
-    } else if(mouseY > COORDS[0][1][1] && mouseY < (COORDS[0][1][1]+LED_SIZE)){
-      myPort.write(LD5);
-    } else if(mouseY > COORDS[0][2][1] && mouseY < (COORDS[0][2][1]+LED_SIZE)){
-      myPort.write(LD8);
+  }else if (mouseX > (COORDS[0][2][1]-(LED_SIZE/2)) && mouseX <(COORDS[0][2][1]+(LED_SIZE/2))){
+    if(mouseY > (COORDS[2][0][1]-(LED_SIZE/2)) && mouseY < (COORDS[2][0][1]+(LED_SIZE/2))){
+      myPort.write(LD3);
+    } else if(mouseY > (COORDS[2][1][1]-(LED_SIZE/2)) && mouseY < (COORDS[2][1][1]+(LED_SIZE/2))){
+      myPort.write(LD6);
+    } else if(mouseY > (COORDS[2][2][1]-(LED_SIZE/2)) && mouseY < (COORDS[2][2][1]+(LED_SIZE/2))){
+      myPort.write(LD9);
     }
   }
 }
