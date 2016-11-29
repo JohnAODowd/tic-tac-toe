@@ -68,6 +68,7 @@ void setup() {
     game_state.state = NOT_STRTD;
   }
   game_state.saved = NTSVD;
+  game_state.refresh = VALID;
 }
 
 void loop() {
@@ -131,18 +132,22 @@ void light_led(char led, char row){
 }
 void light_led(char led, char row,char index_row,char index_col,char color){
   light_led(led,row);
-  Serial.print(index_col,DEC);
-  Serial.print(SEP);
-  Serial.print(index_row,DEC);
-  Serial.print(SEP);
-  Serial.println(color,DEC);
+  if(game_state.refresh){
+    Serial.print(index_col,DEC);
+    Serial.print(SEP);
+    Serial.print(index_row,DEC);
+    Serial.print(SEP);
+    Serial.println(color,DEC);
+  }
 }
 void write_empty(char col,char row){
-  Serial.print(col,DEC);
-  Serial.print(SEP);
-  Serial.print(row,DEC);
-  Serial.print(SEP);
-  Serial.println(EMPTY_,DEC);
+  if(game_state.refresh){
+    Serial.print(col,DEC);
+    Serial.print(SEP);
+    Serial.print(row,DEC);
+    Serial.print(SEP);
+    Serial.println(EMPTY_,DEC);
+  }
 }
 void write_leds(char arr[LED_CNT][LED_CNT]){
   /*
@@ -160,6 +165,7 @@ void write_leds(char arr[LED_CNT][LED_CNT]){
       clear_pins();
     }
   }
+  game_state.refresh = INVALID;
 }
 void light_color(char color){
   /*
@@ -175,25 +181,25 @@ void choose_color(){
   Player color choice
   */
  if(irrecv.decode(&results)){
- if(results.value == PAUSE){
-   game_state.state = SND_HRN;
- }
- else if(results.value == MODE && game_state.yellow_player == PLYR_ONE){
-  light_color(RED);
-  game_state.yellow_player = PLYR_TWO; 
-  game_state.red_player = PLYR_ONE;
-  EEPROM.write(TRN_ADDR,RED);
- }else if(results.value == MODE && game_state.yellow_player == PLYR_TWO){
-  game_state.yellow_player = PLYR_ONE;
-  game_state.red_player = PLYR_TWO;
-  light_color(YLW);
-  EEPROM.write(TRN_ADDR,YLW);
- }
- irrecv.resume();
- } else{
- if(game_state.yellow_player == PLYR_ONE) light_color(YLW);
- else if(game_state.yellow_player == PLYR_TWO) light_color(RED);
- }
+  game_state.refresh = VALID;
+  if(results.value == PAUSE){
+    game_state.state = SND_HRN;
+  } else if(results.value == MODE && game_state.yellow_player == PLYR_ONE){
+    light_color(RED);
+    game_state.yellow_player = PLYR_TWO; 
+    game_state.red_player = PLYR_ONE;
+    EEPROM.write(TRN_ADDR,RED);
+  }else if(results.value == MODE && game_state.yellow_player == PLYR_TWO){
+    game_state.yellow_player = PLYR_ONE;
+    game_state.red_player = PLYR_TWO;
+    light_color(YLW);
+    EEPROM.write(TRN_ADDR,YLW);
+  }
+  irrecv.resume();
+  } else{
+    if(game_state.yellow_player == PLYR_ONE) light_color(YLW);
+    else if(game_state.yellow_player == PLYR_TWO) light_color(RED);
+  }
 }
 void save_game(){
   /*
