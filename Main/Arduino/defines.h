@@ -58,13 +58,13 @@
 #define VALID 1
 #define INVALID 0
 #define TOP_RIGHT board[0][0]
-#define TOP_LEFT board[0][2]
-#define TOP_MID board[0][1]
 #define MID_RIGHT board[1][0]
-#define MID_LEFT board[1][2]
-#define MID_MID board[1][1]
 #define BOT_RIGHT board[2][0]
+#define TOP_LEFT board[0][2]
+#define MID_LEFT board[1][2]
 #define BOT_LEFT board[2][2]
+#define TOP_MID board[0][1]
+#define MID_MID board[1][1]
 #define BOT_MID board[2][1]
 #define WIN_MSK 3
 #define WIN_TST 0
