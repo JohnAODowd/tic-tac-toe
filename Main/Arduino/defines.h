@@ -1,9 +1,11 @@
 #define DF_GUARD
 //#define DEBUG
+
 // PIN STATES
 #define DDRD_PINS 0xFC
 #define DDRB_PINS 0x17
 #define CLR 0x0
+
 // LED VALUES
 #define ROW1 0x6
 #define ROW2 0x5
@@ -15,14 +17,17 @@
 #define RED2 0x40
 #define RED3 0x80
 #define LED_CNT 3
+
 // REFRESH VALUE FOR PERSISTANCE OF VISION
 #define RFRSH_RT 0
+
 // LED STATES
 #define RED -1
 #define YLW 1
 #define NONE 0
 #define OFF 0
 #define IR_PIN 11
+
 // IR_REMOTE VALUES
 #define ZERO 0xFF6897
 #define ONE 0xFF30CF
@@ -73,6 +78,7 @@
 #define BRD_FULL 9
 #define PLYR_TURN 2
 #define PLYR_TST 1
+
 //EEPROM definitions
 #define SVD 1
 #define NTSVD 0
@@ -90,6 +96,7 @@
 #define BRD9 11
 #define MUTE_ADDR 12
 #define SAVE_ADDR 13
+
 // Processing definitions:
 #define BAUD 115200
 #define EMPTY_ 0
