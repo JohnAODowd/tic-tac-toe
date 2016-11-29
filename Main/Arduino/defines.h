@@ -101,3 +101,12 @@
 #define BAUD 115200
 #define EMPTY_ 0
 #define SEP ","
+#define LD1 0
+#define LD2 1
+#define LD3 2
+#define LD4 3
+#define LD5 4
+#define LD6 5
+#define LD7 6
+#define LD8 7
+#define LD9 8

@@ -15,6 +15,15 @@ final static int YLW_COL[] = {238,186,48}; // color for yellow
 final static int YLW_LD = 1;
 final static int RED_LD = -1;
 final static int EMPTY = 0;
+final static byte LD1 = 0;
+final static byte LD2 = 1;
+final static byte LD3 = 2;
+final static byte LD4 = 3;
+final static byte LD5 = 4;
+final static byte LD6 = 5;
+final static byte LD7 = 6;
+final static byte LD8 = 7;
+final static byte LD9 = 8;
 int[][][] COORDS = {{{LED_START,LED_START,EMPTY},
                      {LED_START,COLUMN_2,EMPTY},
                      {LED_START,COLUMN_3,EMPTY}},
@@ -74,5 +83,10 @@ void drawLEDS(){
       }
       ellipse(led[0],led[1],LED_SIZE,LED_SIZE);
     }
+  }
+}
+void mouseClicked(){
+  if(mouseX > COORDS[0][0][0] && mouseX <(COORDS[0][0][0]+LED_SIZE)){
+    myPort.write(LD1);
   }
 }

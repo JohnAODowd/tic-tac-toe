@@ -30,7 +30,7 @@ void horn_pipe();
 void victory_tune();
 void save_game();
 void write_empty(char col,char row);
-
+void read_processing(char led);
 void setup() {
   // put your setup code here, to run once:
   DDRD |= DDRD_PINS;
@@ -92,6 +92,8 @@ void loop() {
         if(results.value == ZERO) save_game();
       }
       irrecv.resume();
+    }else if(!gameOver() && Serial.available()){
+      read_processing(Serial.read());
     }else if(gameOver() && irrecv.decode(&results) || game_state.state == GM_LCKD && irrecv.decode(&results)){
       // handle start new game
       clear_pins();
@@ -175,6 +177,37 @@ void light_color(char color){
     if (color == YLW) for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) light_all[i][j] = YLW;
     else if (color == RED) for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) light_all[i][j] = RED;
     write_leds(light_all);
+}
+void read_processing(char led){
+  switch(led){
+    case LD1:
+        getPlayerInput(ONE);
+        break;
+    case LD2:
+        getPlayerInput(TWO);
+        break;
+    case LD3:
+        getPlayerInput(THREE);
+        break;
+    case LD4:
+        getPlayerInput(FOUR);
+        break;
+    case LD5:
+        getPlayerInput(FIVE);
+        break;
+    case LD6:
+        getPlayerInput(SIX);
+        break;
+    case LD7:
+        getPlayerInput(SEVEN);
+        break;
+    case LD8:
+        getPlayerInput(EIGHT);
+        break;
+    case LD9:
+        getPlayerInput(NINE);
+        break;
+  }
 }
 void choose_color(){
   /*
