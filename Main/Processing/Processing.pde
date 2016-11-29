@@ -1,8 +1,7 @@
 import processing.serial.*;
-static boolean DEBUG = false;
 Serial myPort;
 String val;
-final static int BAUD = 300;
+final static int BAUD = 57600;
 final static int COM_PORT = 0;
 final static int LED_SIZE = 30;
 final static int LED_OFFSET = 15;
@@ -29,17 +28,11 @@ int[][][] COORDS = {{{LED_START,LED_START,EMPTY},
 
 void setup(){
   size(200,200);
-  //frameRate(BAUD);
-  //redraw();
-  //loop();
-  try{
-    String portName = Serial.list()[COM_PORT];
-    myPort = new Serial(this,portName,BAUD);
-  }catch(ArrayIndexOutOfBoundsException e){
-    print(e);
-    DEBUG = true;
-  }
+  drawLEDS();
+  String portName = Serial.list()[COM_PORT];
+  myPort = new Serial(this,portName,BAUD);
 }
+
 void draw(){
   while(myPort.available() > 0){
     try{
@@ -50,16 +43,10 @@ void draw(){
         incoming_data[i] = Integer.parseInt(display_values[i]);
       }
       COORDS[incoming_data[0]][incoming_data[1]][2] = incoming_data[2];
-      //println(val);      
+      drawLEDS();   
     } catch(Exception e){
-      print(e.toString());
     }
   }
-  redraw();
-}
-void redraw(){
-  drawLEDS();
-  //println(COORDS[0][1][2]);
 }
 void drawLEDS(){
   background(255);

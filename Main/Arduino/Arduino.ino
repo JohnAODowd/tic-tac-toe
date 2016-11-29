@@ -42,7 +42,7 @@ void setup() {
   char turn = EEPROM.read(TRN_ADDR);
   #ifdef DEBUG
   Serial.println(turn,DEC);
-  #endif DEBUG
+  #endif 
   if(turn != RED && turn != YLW){
     game_state.yellow_player = PLYR_ONE;
     game_state.red_player = PLYR_TWO;
@@ -257,7 +257,7 @@ void victory_tune(char col){
     if(game_state.mute_state) delayMicroseconds(pause);
   }
 }
-static void invalid_move(){
+void invalid_move(){
     for(int timer = 0; timer < StartingBuzzer_MAXIMUM_COUNT; timer++){
     note = StartingBuzzer_tune[timer];
     beat = StartingBuzzer_beats[timer];
