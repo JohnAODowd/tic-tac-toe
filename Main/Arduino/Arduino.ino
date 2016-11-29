@@ -29,7 +29,6 @@ void play_note(char col);
 void horn_pipe();
 void victory_tune();
 void save_game();
-void print_board();
 void write_empty(char col,char row);
 
 void setup() {
@@ -40,9 +39,6 @@ void setup() {
   irrecv.enableIRIn();
   Serial.begin(BAUD);
   char turn = EEPROM.read(TRN_ADDR);
-  #ifdef DEBUG
-  Serial.println(turn,DEC);
-  #endif 
   if(turn != RED && turn != YLW){
     game_state.yellow_player = PLYR_ONE;
     game_state.red_player = PLYR_TWO;
@@ -76,7 +72,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-    //print_board();
     if(game_state.state == INVALID_MOVE) invalid_move();
     if (game_state.state == SV_GM){
       save_game();
@@ -90,11 +85,7 @@ void loop() {
       game_state.state = GM_RDY;
     }else if ((!gameOver()) && irrecv.decode(&results)) {
       // if game is being played
-      #ifdef DEBUG
-      Serial.println(results.value, HEX);
-      Serial.println(gameOver(),DEC);
-      #endif
-      if (!gameOver()){
+    if (!gameOver()){
         //if game is not over pass in player input.
         getPlayerInput(results.value);
         if(results.value == ZERO) save_game();
@@ -177,10 +168,6 @@ void light_color(char color){
     char light_all[3][3];
     if (color == YLW) for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) light_all[i][j] = YLW;
     else if (color == RED) for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) light_all[i][j] = RED;
-    #ifdef DEBUG
-    // print out contents of light all array
-    for(char i=0;i<LED_CNT;i++) for(char j=0;j<LED_CNT;j++) Serial.println(light_all[i][j],DEC);
-    #endif
     write_leds(light_all);
 }
 void choose_color(){
@@ -226,24 +213,6 @@ void save_game(){
   EEPROM.write(BRD9,BOT_LEFT);
   EEPROM.write(SAVE_ADDR,SVD);
   game_state.saved = SVD;
-}
-void print_board(){
-  Serial.print(TOP_RIGHT,DEC);
-  Serial.print("|");
-  Serial.print(TOP_MID,DEC);
-  Serial.print("|");
-  Serial.println(TOP_LEFT,DEC);
-  Serial.print(MID_RIGHT,DEC);
-  Serial.print("|");
-  Serial.print(MID_MID,DEC);
-  Serial.print("|");
-  Serial.println(MID_LEFT,DEC);
-  Serial.print(BOT_RIGHT,DEC);
-  Serial.print("|");
-  Serial.print(BOT_MID,DEC);
-  Serial.print("|");
-  Serial.println(BOT_LEFT,DEC);
-  Serial.println();
 }
 void victory_tune(char col){
     for(int timer = 0; timer < colmans_MAXIMUM_COUNT; timer++){
