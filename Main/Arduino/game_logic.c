@@ -20,12 +20,13 @@ void invalidMove(){
   game_state.state = INVALID_MOVE;
 }
 char isFull(){
-  // Return true if board is full, false otherwise
+  // Return true if board is full, false otherwise.
   if(game_state.move_num == BRD_FULL) return 1;
   else return NOT_OVER;
 }
 void clearBoard(){
   // Set the value of each position in the board to OFF.
+  // Set the game state to NOT_STRTD and reset the move number.
   char i,j;
   for (i = 0; i < LED_CNT; i++){
     for (j = 0; j < LED_CNT; j++){
@@ -50,7 +51,9 @@ void new_game(int input){
   }
 }
 void getPlayerInput(int irSensorValue) {
+	// Get player input from IR Remote.
 	
+	// Player one plays on odd-number moves; Player two on even. 
 	char player;
 	if (game_state.move_num % PLYR_TURN == PLYR_TST){
                 if(game_state.yellow_player == PLYR_ONE) player = PLYR_ONE;
@@ -60,6 +63,8 @@ void getPlayerInput(int irSensorValue) {
                 else if(game_state.red_player == PLYR_TWO) player = PLYR_TWO;
 	}
 	
+	// Recieve input until vaild input recieved.
+	// Input is vaild if board location not already taken. 
 	char valid_move = INVALID;
 		switch(irSensorValue) {
 		    // Setup cases for the return value IR Remote Sensor. 
@@ -159,14 +164,10 @@ void getPlayerInput(int irSensorValue) {
 		}
 	if (valid_move) game_state.move_num++;
 }
-
 char gameOver() {
 	
 	// Game is over when there is a draw or when there is a win.
-	// Return 0 if not over, positive int otherwise.
-	// Return -3 for RED Win.
-	// Return 3 for YLW Win.
-	// Return 1 for Draw.
+	// Return true if game is over, false otherwise.
         if(game_state.state == GM_LCKD) return game_state.state;
         if(game_state.state == NOT_STRTD) return game_state.state;
         if(game_state.state == SND_HRN) return game_state.state;
